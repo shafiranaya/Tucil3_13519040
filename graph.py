@@ -25,7 +25,7 @@ def make_adj_list(m):
     n = len(m)
     adj_list = []
     for i in range(0, n):
-        for j in range(i, n):
+        for j in range(i, n): # asumsi semua jalan 2 arah, 
             if m[i][j] == '1':
                 edge = make_edge(str(i+1), str(j+1))
                 adj_list.append(edge)
