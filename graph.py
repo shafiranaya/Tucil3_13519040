@@ -22,6 +22,18 @@ def make_matrix(lines):
         adj_matrix.append(line)
     return adj_matrix
 
+def make_heuristic_matrix(m):
+    n = len(m)
+    heuristic_matrix = [[ 0 for i in range(n)] for j in range(n)]
+    for i in range(0,n):
+        for j in range(0,n):
+            if m[i][j] == '1':
+                distance = haversineDistance(coordinates[i],coordinates[j])
+                heuristic_matrix[i][j] = distance
+            else:
+                heuristic_matrix[i][j] = -999
+    return heuristic_matrix
+
 def make_adj_list(m):
     n = len(m)
     adj_list = []
@@ -35,27 +47,32 @@ def make_adj_list(m):
 # parameternya tuple of coordinate a, dan tuple of coordinate b
 # return: haversineDistance dalam meters 
 def haversineDistance(a,b):
-    # distance between latitudes  and longitudes
+    # ambil nilai latitude dan longtitude
     lat1 = a[0]
     lon1 = a[1]
     lat2 = b[0]
     lon2 = b[1]
+     # convert ke radian
+    lat1_rad = lat1 * math.pi / 180.0
+    lat2_rad = lat2 * math.pi / 180.0 
+    # selisih latitude dan longtitude dalam radian
+    delta_lat = (lat2 - lat1) * math.pi / 180.0
+    delta_lon = (lon2 - lon1) * math.pi / 180.0
+    # bagian dari rumus (yang di dalam akar)
+    a = (pow(math.sin(delta_lat / 2), 2) + pow(math.sin(delta_lon / 2), 2) * math.cos(lat1_rad) * math.cos(lat2_rad));
+    # radius bumi
+    r = 6371
+    # rumus untuk mendapatkan distance dalam meter
+    distance = 2 * r * math.asin(math.sqrt(a)) * 1000
+    return distance
 
-    dLat = (lat2 - lat1) * math.pi / 180.0
-    dLon = (lon2 - lon1) * math.pi / 180.0
-  
-    # convert to radians
-    lat1 = lat1 * math.pi / 180.0
-    lat2 = lat2 * math.pi / 180.0
-  
-    # apply formulae
-    a = (pow(math.sin(dLat / 2), 2) + 
-         pow(math.sin(dLon / 2), 2) * 
-             math.cos(lat1) * math.cos(lat2));
-    rad = 6371
-    c = 2 * math.asin(math.sqrt(a))
-    meters = rad * c * 1000
-    return meters
+def print_matrix(m):
+    for i in range(len(m)):
+        for j in range(len(m[0])):
+            print(m[i][j],end=" ")
+        print()
+
+#def astar(start, end):
 
 # PROGRAM UTAMA
 f = open("itb.txt", "r")
@@ -63,10 +80,19 @@ lines = f.read().splitlines()
 coordinates = make_coordinates(lines)
 matrix = make_matrix(lines)
 adj_list = make_adj_list(matrix)
-print(adj_list)
-print(coordinates)
-for line in coordinates:
-    print(line)
+heur_matrix = make_heuristic_matrix(matrix)
+
+print("MATRIX")
+print_matrix(matrix)
+print("heuristic matrix")
+print_matrix(heur_matrix)
+print("ADJ LIST")
+for bla in adj_list:
+    print(bla)
+    
+# print(coordinates)
+# for line in coordinates:
+#     print(line)
 
 # TEST HAVERSINE
-print(haversineDistance(coordinates[1],coordinates[4]))
+# print(haversineDistance(coordinates[1],coordinates[4]))
