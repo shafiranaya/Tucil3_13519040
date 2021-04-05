@@ -18,72 +18,77 @@ def make_matrix(lines):
         adj_matrix.append(line)
     return adj_matrix
 
-def make_edge(a, b):
-    edge = tuple((a, b))
-    return edge
-
-# fungsi buat bikin list of edges, edge nya tuple 2 simpul
-# belom kepake di main program wkwk
-def make_edge_list(m):
+def make_heuristic_matrix(m):
     n = len(m)
-    edge_list = []
-    for i in range(0, n):
-        for j in range(i, n): # asumsi semua jalan 2 arah, 
+    heuristic_matrix = [[ 0 for i in range(n)] for j in range(n)]
+    for i in range(0,n):
+        for j in range(0,n):
             if m[i][j] == '1':
-                edge = make_edge(str(i+1), str(j+1))
-                edge_list.append(edge)
-    return edge_list
+                distance = haversineDistance(coordinates[i],coordinates[j])
+                heuristic_matrix[i][j] = distance
+            else:
+                heuristic_matrix[i][j] = -999
+    return heuristic_matrix
 
+def make_adj_list(m):
+    adj_list = []
+    for i in range(0, len(m)):
+        neighbor = []
+        for j in range(0, len(m)):
+            if m[i][j] == '1':
+                neighbor.append(str(j+1))
+        adj_list.append(neighbor)
+    return adj_list
+    
 # parameternya tuple of coordinate a, dan tuple of coordinate b
 # return: haversineDistance dalam meters 
 def haversineDistance(a,b):
-    # distance between latitudes  and longitudes
+    # ambil nilai latitude dan longtitude
     lat1 = a[0]
     lon1 = a[1]
     lat2 = b[0]
     lon2 = b[1]
+     # convert ke radian
+    lat1_rad = lat1 * math.pi / 180.0
+    lat2_rad = lat2 * math.pi / 180.0 
+    # selisih latitude dan longtitude dalam radian
+    delta_lat = (lat2 - lat1) * math.pi / 180.0
+    delta_lon = (lon2 - lon1) * math.pi / 180.0
+    # bagian dari rumus (yang di dalam akar)
+    a = (pow(math.sin(delta_lat / 2), 2) + pow(math.sin(delta_lon / 2), 2) * math.cos(lat1_rad) * math.cos(lat2_rad));
+    # radius bumi
+    r = 6371
+    # rumus untuk mendapatkan distance dalam meter
+    distance = 2 * r * math.asin(math.sqrt(a)) * 1000
+    return distance
 
-    dLat = (lat2 - lat1) * math.pi / 180.0
-    dLon = (lon2 - lon1) * math.pi / 180.0
-  
-    # convert to radians
-    lat1 = lat1 * math.pi / 180.0
-    lat2 = lat2 * math.pi / 180.0
-  
-    # apply formulae
-    a = (pow(math.sin(dLat / 2), 2) + 
-         pow(math.sin(dLon / 2), 2) * 
-             math.cos(lat1) * math.cos(lat2))
-    rad = 6371
-    c = 2 * math.asin(math.sqrt(a))
-    meters = rad * c * 1000
-    return meters
+def print_matrix(m):
+    for i in range(len(m)):
+        for j in range(len(m[0])):
+            print(m[i][j],end=" ")
+        print()
 
-# matriks diubah jadi matriks berbobot
-# buat matriks baru soalnya kali aja matriks yang gak berbobot masih dipake
-def convert_to_weighted(m, c):
-    wm = [] 
-    for i in range(0, len(m)):
-        line = []
-        for j in range(0, len(m)):
-            if m[i][j] == '0':
-                line.append(0) # ini diubah dari string ke int
-            else: # m[i][j] == '1'
-                line.append(haversineDistance(c[i], c[j]))
-        wm.append(line)
-    return wm
+#def astar(start, end):
 
 # PROGRAM UTAMA
 f = open("itb.txt", "r")
 lines = f.read().splitlines()
 coordinates = make_coordinates(lines)
 matrix = make_matrix(lines)
-wmatrix = convert_to_weighted(matrix, coordinates)
+adj_list = make_adj_list(matrix)
+heur_matrix = make_heuristic_matrix(matrix)
 
-for i in range(len(wmatrix)):
-    for j in range(len(wmatrix)):
-        print(wmatrix[i][j], end=' ')
-    print()
+print("MATRIX")
+print_matrix(matrix)
+print("heuristic matrix")
+print_matrix(heur_matrix)
+print("ADJ LIST")
+for bla in adj_list:
+    print(bla)
+    
+# print(coordinates)
+# for line in coordinates:
+#     print(line)
 
 # TEST HAVERSINE
 # print(haversineDistance(coordinates[1],coordinates[4]))
