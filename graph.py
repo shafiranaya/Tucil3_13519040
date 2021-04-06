@@ -3,16 +3,30 @@ import math
 import networkx as nx
 import matplotlib.pyplot as plt
 
+# TODO Buat global
+
 def make_coordinates(lines):
     n = int(lines[0])
     list_of_coordinates = []
     list_of_names = []
     for i in range(1, n+1):
         coordinates = lines[i].split(" ")
-        coords_tuple = tuple((float(coordinates[1]), float(coordinates[2])))
-        list_of_coordinates.append(coords_tuple)
+        coords_list = [float(coordinates[1]), float(coordinates[2])]
+        list_of_coordinates.append(coords_list)
         list_of_names.append(coordinates[0])
     return list_of_coordinates, list_of_names
+
+def make_list_of_lat(c):
+    lat = []
+    for i in range(len(c)):
+        lat.append(c[i][0])
+    return lat
+
+def make_list_of_lon(c):
+    lon = []
+    for i in range(len(c)):
+        lon.append(c[i][1])
+    return lon
 
 def make_matrix(lines):
     n = int(lines[0])
@@ -162,19 +176,38 @@ def make_graph(edge_list):
     G.add_weighted_edges_from(edge_list)
     return G
 
+def path_coords(path, coord_list, list_of_names):
+    list_of_path_coords = []
+    for node in path:
+        list_of_path_coords.append(coord_list[convert_to_idx(node,list_of_names)])
+    return list_of_path_coords
+
 # PROGRAM UTAMA
+file_name = input("Masukkan nama file dalam format .txt: ")
 f = open("itb.txt", "r")
 lines = f.read().splitlines()
 coordinates = make_coordinates(lines)[0]
+list_lat = make_list_of_lat(coordinates)
+print(list_lat)
+list_lon = make_list_of_lon(coordinates)
+print(list_lon)
+# print(coordinates)
 node_names = make_coordinates(lines)[1]
 matrix = make_matrix(lines)
 adj_list = make_adj_list(matrix,node_names)
 adj_matrix = make_adj_matrix(matrix)
 heur_matrix = make_heuristic_matrix(matrix)
 
+start_node = input("Masukkan start node: ")
+goal_node = input("Masukkan goal node: ")
+print("Hasilnya adalah: ")
+# print(astar(start_node,goal_node,adj_matrix,heur_matrix,adj_list,node_names))
+
 print(astar('B','F',adj_matrix,heur_matrix,adj_list,node_names))
-edgelist = make_edge_list(adj_matrix, node_names)
+path_solution = astar('B','F',adj_matrix,heur_matrix,adj_list,node_names)[0]
+list_path = path_coords(path_solution,coordinates,node_names)
+print(list_path)
+# edgelist = make_edge_list(adj_matrix, node_names)
 # for i in range(len(edgelist)):
 #     print(edgelist[i])
 
-# TODO fungsi buat solve astar

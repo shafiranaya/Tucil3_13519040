@@ -1,0 +1,17 @@
+8
+SimpangSoeHattaMTC -6.940351 107.658245
+SimpangRancabolangSoeHatta -6.939252 107.663915
+BormaRancabolang -6.943234 107.663564
+SimpangCidurianSelSoeHatta -6.942138 107.652719
+SimpangCidurianSelCiwastra -6.955690 107.654484
+RSIAHarapanBunda -6.956029 107.662112
+MasjidBuahBatu -6.954222 107.639885
+CarrefourKiaracondong -6.946367 107.641756
+0 1 0 1 0 0 0 0
+1 0 1 0 0 0 0 0
+0 1 0 0 0 1 0 0
+1 0 0 0 1 0 0 1
+0 0 0 1 0 1 1 0
+0 0 1 0 1 0 0 0
+0 0 0 0 1 0 0 1
+0 0 0 1 0 0 1 0
