@@ -191,7 +191,7 @@ def print_route(solution):
         else:
             print(solution[0][i], end=" -> ")
     print("Panjang lintasan: ", solution[1], "meter. ")
-    print("Buka map.html pada browser untuk melihat visualisasi peta.")
+    print("Buka map.html (terdapat pada folder bin) pada Google Chrome untuk melihat visualisasi peta.")
 
 def initialize(file_name):
     # global list_of_coordinates

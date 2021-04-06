@@ -38,4 +38,4 @@ line = folium.vector_layers.PolyLine(list_path, color='red', weight=10).add_to(f
 fg.add_to(map)
 
 map.add_child(folium.LayerControl())
-map.save(outfile='map.html')
+map.save(outfile='../bin/map.html')
