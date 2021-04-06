@@ -24,18 +24,18 @@ ACCOUNT="A0001"
 def make_graph_figure(graph):
     figure = {
         "data": traceRecode,
-        "layout": go.Layout(title='Interactive Transaction Visualization', showlegend=False, hovermode='closest',
+        "layout": go.Layout(title='Rute Graf', showlegend=False, hovermode='closest',
                             margin={'b': 40, 'l': 40, 'r': 40, 't': 40},
                             xaxis={'showgrid': False, 'zeroline': False, 'showticklabels': False},
                             yaxis={'showgrid': False, 'zeroline': False, 'showticklabels': False},
                             height=600,
-                            #clickmode='event+select',
+                            clickmode='event+select',
                             annotations=[
                                 dict(
-                                    ax=(G.nodes[edge[0]]['pos'][0] + G.nodes[edge[1]]['pos'][0]) / 2,
-                                    ay=(G.nodes[edge[0]]['pos'][1] + G.nodes[edge[1]]['pos'][1]) / 2, axref='x', ayref='y',
-                                    x=(G.nodes[edge[1]]['pos'][0] * 3 + G.nodes[edge[0]]['pos'][0]) / 4,
-                                    y=(G.nodes[edge[1]]['pos'][1] * 3 + G.nodes[edge[0]]['pos'][1]) / 4, xref='x', yref='y',
+                                    # ax=(G.nodes[edge[0]]['pos'][0] + G.nodes[edge[1]]['pos'][0]) / 2,
+                                    # ay=(G.nodes[edge[0]]['pos'][1] + G.nodes[edge[1]]['pos'][1]) / 2, axref='x', ayref='y',
+                                    # x=(G.nodes[edge[1]]['pos'][0] * 3 + G.nodes[edge[0]]['pos'][0]) / 4,
+                                    # y=(G.nodes[edge[1]]['pos'][1] * 3 + G.nodes[edge[0]]['pos'][1]) / 4, xref='x', yref='y',
                                     showarrow=True,
                                     arrowhead=3,
                                     arrowsize=4,
@@ -212,37 +212,37 @@ app.layout = html.Div([
             html.Div(
                 className="two columns",
                 children=[
-                    dcc.Markdown(d("""
-                            **Time Range To Visualize**
-                            Slide the bar to define year range.
-                            """)),
-                    html.Div(
-                        className="twelve columns",
-                        children=[
-                            dcc.RangeSlider(
-                                id='my-range-slider',
-                                min=2010,
-                                max=2019,
-                                step=1,
-                                value=[2010, 2019],
-                                marks={
-                                    2010: {'label': '2010'},
-                                    2011: {'label': '2011'},
-                                    2012: {'label': '2012'},
-                                    2013: {'label': '2013'},
-                                    2014: {'label': '2014'},
-                                    2015: {'label': '2015'},
-                                    2016: {'label': '2016'},
-                                    2017: {'label': '2017'},
-                                    2018: {'label': '2018'},
-                                    2019: {'label': '2019'}
-                                }
-                            ),
-                            html.Br(),
-                            html.Div(id='output-container-range-slider')
-                        ],
-                        style={'height': '300px'}
-                    ),
+                    # dcc.Markdown(d("""
+                    #         **Time Range To Visualize**
+                    #         Slide the bar to define year range.
+                    #         """)),
+                    # html.Div(
+                    #     className="twelve columns",
+                    #     children=[
+                    #         dcc.RangeSlider(
+                    #             id='my-range-slider',
+                    #             min=2010,
+                    #             max=2019,
+                    #             step=1,
+                    #             value=[2010, 2019],
+                    #             marks={
+                    #                 2010: {'label': '2010'},
+                    #                 2011: {'label': '2011'},
+                    #                 2012: {'label': '2012'},
+                    #                 2013: {'label': '2013'},
+                    #                 2014: {'label': '2014'},
+                    #                 2015: {'label': '2015'},
+                    #                 2016: {'label': '2016'},
+                    #                 2017: {'label': '2017'},
+                    #                 2018: {'label': '2018'},
+                    #                 2019: {'label': '2019'}
+                    #             }
+                    #         ),
+                    #         html.Br(),
+                    #         html.Div(id='output-container-range-slider')
+                    #     ],
+                    #     style={'height': '300px'}
+                    # ),
                     html.Div(
                         className="twelve columns",
                         children=[
@@ -263,61 +263,68 @@ app.layout = html.Div([
                 className="eight columns",
                 children=[dcc.Graph(id="my-graph",
                                     figure=network_graph(YEAR, ACCOUNT))],
-            ),
-
-            #########################################right side two output component
-            html.Div(
-                className="two columns",
-                children=[
-                    html.Div(
-                        className='twelve columns',
-                        children=[
-                            dcc.Markdown(d("""
-                            **Hover Data**
-                            Mouse over values in the graph.
-                            """)),
-                            html.Pre(id='hover-data', style=styles['pre'])
-                        ],
-                        style={'height': '400px'}),
-
-                    html.Div(
-                        className='twelve columns',
-                        children=[
-                            dcc.Markdown(d("""
-                            **Click Data**
-                            Click on points in the graph.
-                            """)),
-                            html.Pre(id='click-data', style=styles['pre'])
-                        ],
-                        style={'height': '400px'})
-                ]
             )
+            # TODO
+            # html.Div(
+            #     className="eight columns",
+            #     children=[dcc.Graph(id="my-graph",
+            #                         figure=make_graph_figure(G))],
+            # )
+
+            # #########################################right side two output component
+            # html.Div(
+            #     className="two columns",
+            #     children=[
+            #         html.Div(
+            #             className='twelve columns',
+            #             children=[
+            #                 dcc.Markdown(d("""
+            #                 **Hover Data**
+            #                 Mouse over values in the graph.
+            #                 """)),
+            #                 html.Pre(id='hover-data', style=styles['pre'])
+            #             ],
+            #             style={'height': '400px'}),
+
+            #         html.Div(
+            #             className='twelve columns',
+            #             children=[
+            #                 dcc.Markdown(d("""
+            #                 **Click Data**
+            #                 Click on points in the graph.
+            #                 """)),
+            #                 html.Pre(id='click-data', style=styles['pre'])
+            #             ],
+            #             style={'height': '400px'})
+            #     ]
+            # )
         ]
     )
 ])
 
 ###################################callback for left side components
-@app.callback(
-    dash.dependencies.Output('my-graph', 'figure'),
-    [dash.dependencies.Input('my-range-slider', 'value'), dash.dependencies.Input('input1', 'value')])
-def update_output(value,input1):
-    YEAR = value
-    ACCOUNT = input1
-    return network_graph(value, input1)
+# @app.callback(
+#     dash.dependencies.Output('my-graph', 'figure'),
+#     [dash.dependencies.Input('my-range-slider', 'value'), dash.dependencies.Input('input1', 'value')])
+# def update_output(value,input1):
+#     YEAR = value
+#     ACCOUNT = input1
+#     return network_graph(value, input1)
+
     # to update the global variable of YEAR and ACCOUNT
 ################################callback for right side components
-@app.callback(
-    dash.dependencies.Output('hover-data', 'children'),
-    [dash.dependencies.Input('my-graph', 'hoverData')])
-def display_hover_data(hoverData):
-    return json.dumps(hoverData, indent=2)
+# @app.callback(
+#     dash.dependencies.Output('hover-data', 'children'),
+#     [dash.dependencies.Input('my-graph', 'hoverData')])
+# def display_hover_data(hoverData):
+#     return json.dumps(hoverData, indent=2)
 
 
-@app.callback(
-    dash.dependencies.Output('click-data', 'children'),
-    [dash.dependencies.Input('my-graph', 'clickData')])
-def display_click_data(clickData):
-    return json.dumps(clickData, indent=2)
+# @app.callback(
+#     dash.dependencies.Output('click-data', 'children'),
+#     [dash.dependencies.Input('my-graph', 'clickData')])
+# def display_click_data(clickData):
+#     return json.dumps(clickData, indent=2)
 
 if __name__ == '__main__':
     app.run_server(debug=True)
