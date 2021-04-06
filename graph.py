@@ -98,7 +98,7 @@ def convert_to_name(idx, list_of_names):
     
 # initial adalah nama start node (string)
 # final adalah nama goal node (string)
-def astar(initial, final, adj, heur, list_of_names):
+def astar(initial, final, adj, heur, adj_list, list_of_names):
     idx_initial = convert_to_idx(initial, list_of_names)
     idx_final = convert_to_idx(final, list_of_names)
    
@@ -115,20 +115,19 @@ def astar(initial, final, adj, heur, list_of_names):
         if (current_node_idx == idx_final):
             break
         # mengunjungi node-node yang bertetangga dengan current_node
-        for i in range(len(adj[current_node_idx])):
-            if (adj[current_node_idx][i] != 0):
-                # copy visited path
-                visited_node = []
-                for c in current_node[2]:
-                    visited_node.append(c)
-                i_name = convert_to_name(i, list_of_names)
-                visited_node.append(i_name)
-                # masukkan node ke queue
-                # masukkan informasi: current_node name, f(current_node), visited_node ke queue
-                queue.append([i_name, adj[current_node_idx][i] + heur[i][idx_final], visited_node])
-                # urutkan menaik, agar selalu pop yang costnya terkecil
-                queue.sort(key = lambda q : q[1])
-    
+        for i_name in adj_list[current_node_idx]:
+            # copy visited path
+            visited_node = []
+            for c in current_node[2]:
+                visited_node.append(c)
+            i = convert_to_idx(i_name, list_of_names)
+            visited_node.append(i_name)
+            # masukkan node ke queue
+            # masukkan informasi: current_node name, f(current_node), visited_node ke queue
+            queue.append([i_name, adj[current_node_idx][i] + heur[i][idx_final], visited_node])
+            # urutkan menaik, agar selalu pop yang costnya terkecil
+            queue.sort(key = lambda q : q[1])
+
     # path adalah shortest path
     path = current_node[2]
     
@@ -151,4 +150,4 @@ matrix = make_matrix(lines)
 adj_list = make_adj_list(matrix)
 adj_matrix = make_adj_matrix(matrix)
 heur_matrix = make_heuristic_matrix(matrix)
-print(astar('2','6',adj_matrix,heur_matrix,node_names))
+print(astar('2','6',adj_matrix,heur_matrix,adj_list,node_names))
