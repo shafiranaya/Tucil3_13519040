@@ -1,9 +1,7 @@
 # File: graph.py
 import math
-import networkx as nx
-import matplotlib.pyplot as plt
-
-# TODO Buat global
+# import networkx as nx
+# import matplotlib.pyplot as plt
 
 def make_coordinates(lines):
     global list_of_coordinates
@@ -32,6 +30,12 @@ def make_list_of_lon(c):
         list_lon.append(c[i][1])
     return list_lon
 
+def avg_lat(lat):
+    return sum(lat) / len(lat)
+
+def avg_lon(lon):
+    return sum(lon) / len(lon)
+
 def make_matrix(lines):
     n = int(lines[0])
     adj_matrix = []
@@ -48,24 +52,10 @@ def make_adj_list(m):
         neighbor = []
         for j in range(0, len(m)):
             if m[i][j] == '1':
-                # neighbor.append(str(j+1))
                 name = convert_to_name(j)
                 neighbor.append(name)
         adj_list.append(neighbor)
-    return adj_list
-
-# TODO hapus
-def make_weighted_edge(n1, n2, w):
-    return tuple((n1, n2, {'weight': w}))
-
-# # TODO kayaknya hapus
-# def make_edge_list(am, names):
-#     edge_list = []
-#     for i in range(len(am)):
-#         for j in range(i, len(am)):
-#             if am[i][j] != 0:
-#                 edge_list.append(make_weighted_edge(names[i], names[j], am[i][j]))
-#     return edge_list                
+    return adj_list               
 
 def make_adj_matrix(m):
     global adj_matrix
@@ -114,13 +104,6 @@ def haversineDistance(a,b):
     # rumus untuk mendapatkan distance dalam meter
     distance = 2 * r * math.asin(math.sqrt(a)) * 1000
     return distance
-
-# # TODO hapus karena cuma untuk membantu
-# def print_matrix(m):
-#     for i in range(len(m)):
-#         for j in range(len(m[0])):
-#             print(m[i][j],end=" ")
-#         print()
 
 # convert node name to node index
 def convert_to_idx(node_name):
@@ -191,12 +174,6 @@ def astar(initial, final):
     
     return path, cost
 
-# TODO hapus
-def make_graph(edge_list):
-    G = nx.Graph()
-    G.add_weighted_edges_from(edge_list)
-    return G
-
 def path_coords(path):
     global list_of_names
     global list_of_coordinates
@@ -234,47 +211,4 @@ def initialize(file_name):
     adj_list = make_adj_list(matrix)
     adj_matrix = make_adj_matrix(matrix)
     heur_matrix = make_heuristic_matrix(matrix)
-
-# PROGRAM UTAMA FIX
-file_name = input("Masukkan nama file dalam format .txt: ")
-initialize(file_name)
-start_node = input("Masukkan start node: ")
-goal_node = input("Masukkan goal node: ")
-print("Hasil: ")
-path_solution = astar(start_node, goal_node)
-list_path = path_coords(path_solution)
-print(list_path)
-# print(list_of_path_coords)
-print_route(path_solution)
-
-# PROGRAM UTAMA TEST
-# file_name = input("Masukkan nama file dalam format .txt: ")
-# f = open("itb.txt", "r")
-# lines = f.read().splitlines()
-# coordinates = make_coordinates(lines)[0]
-# list_lat = make_list_of_lat(coordinates)
-# # print(list_lat)
-# list_lon = make_list_of_lon(coordinates)
-# # print(list_lon)
-# # print(coordinates)
-# node_names = make_coordinates(lines)[1]
-# matrix = make_matrix(lines)
-# adj_list = make_adj_list(matrix)
-# adj_matrix = make_adj_matrix(matrix)
-# heur_matrix = make_heuristic_matrix(matrix)
-
-# start_node = input("Masukkan start node: ")
-# goal_node = input("Masukkan goal node: ")
-# print("Hasilnya adalah: ")
-# # print(astar(start_node,goal_node,adj_matrix,heur_matrix,adj_list,node_names))
-
-# print(astar('B','F'))
-# path_solution = astar('B','F')
-# print_route(path_solution)
-
-# # list_path = path_coords(path_solution,coordinates,node_names)
-# # print(list_path)
-# # edgelist = make_edge_list(adj_matrix, node_names)
-# # for i in range(len(edgelist)):
-# #     print(edgelist[i])
 
