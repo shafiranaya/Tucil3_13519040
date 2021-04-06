@@ -1,5 +1,7 @@
 # File: graph.py
 import math
+import networkx as nx
+import matplotlib.pyplot as plt
 
 def make_coordinates(lines):
     n = int(lines[0])
@@ -29,6 +31,17 @@ def make_adj_list(m):
                 neighbor.append(str(j+1))
         adj_list.append(neighbor)
     return adj_list
+
+def make_weighted_edge(n1, n2, w):
+    return tuple((n1, n2, w))
+
+def make_edge_list(am, names):
+    edge_list = []
+    for i in range(len(am)):
+        for j in range(i, len(am)):
+            if am[i][j] != 0:
+                edge_list.append(tuple((names[i], names[j], am[i][j])))
+    return edge_list                
 
 def make_adj_matrix(m):
     n = len(m)
@@ -141,6 +154,11 @@ def astar(initial, final, adj, heur, adj_list, list_of_names):
     
     return path, cost
 
+def make_graph(edge_list):
+    G = nx.Graph()
+    G.add_weighted_edges_from(edge_list)
+    return G
+
 # PROGRAM UTAMA
 f = open("itb.txt", "r")
 lines = f.read().splitlines()
@@ -151,3 +169,8 @@ adj_list = make_adj_list(matrix)
 adj_matrix = make_adj_matrix(matrix)
 heur_matrix = make_heuristic_matrix(matrix)
 print(astar('2','6',adj_matrix,heur_matrix,adj_list,node_names))
+edgelist = make_edge_list(adj_matrix, node_names)
+for i in range(len(edgelist)):
+    print(edgelist[i])
+
+# TODO fungsi buat solve astar
