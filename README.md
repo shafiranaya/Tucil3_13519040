@@ -31,4 +31,4 @@
 ## Contact
 Created by: 
 Shafira Naya Aprisadianti - 13519040 - K-1
-Delisha Azza Naadira - 13519133
+Delisha Azza Naadira - 13519133 - K-3

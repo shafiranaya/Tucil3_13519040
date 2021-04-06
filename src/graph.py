@@ -6,6 +6,8 @@ import matplotlib.pyplot as plt
 # TODO Buat global
 
 def make_coordinates(lines):
+    global list_of_coordinates
+    global list_of_names
     n = int(lines[0])
     list_of_coordinates = []
     list_of_names = []
@@ -17,16 +19,18 @@ def make_coordinates(lines):
     return list_of_coordinates, list_of_names
 
 def make_list_of_lat(c):
-    lat = []
+    global list_lat
+    list_lat = []
     for i in range(len(c)):
-        lat.append(c[i][0])
-    return lat
+        list_lat.append(c[i][0])
+    return list_lat
 
 def make_list_of_lon(c):
-    lon = []
+    global list_lon
+    list_lon = []
     for i in range(len(c)):
-        lon.append(c[i][1])
-    return lon
+        list_lon.append(c[i][1])
+    return list_lon
 
 def make_matrix(lines):
     n = int(lines[0])
@@ -36,46 +40,54 @@ def make_matrix(lines):
         adj_matrix.append(line)
     return adj_matrix
 
-def make_adj_list(m,list_of_names):
+def make_adj_list(m):
+    global adj_list
+    global list_of_names
     adj_list = []
     for i in range(0, len(m)):
         neighbor = []
         for j in range(0, len(m)):
             if m[i][j] == '1':
                 # neighbor.append(str(j+1))
-                name = convert_to_name(j,list_of_names)
+                name = convert_to_name(j)
                 neighbor.append(name)
         adj_list.append(neighbor)
     return adj_list
 
+# TODO hapus
 def make_weighted_edge(n1, n2, w):
     return tuple((n1, n2, {'weight': w}))
 
-def make_edge_list(am, names):
-    edge_list = []
-    for i in range(len(am)):
-        for j in range(i, len(am)):
-            if am[i][j] != 0:
-                edge_list.append(make_weighted_edge(names[i], names[j], am[i][j]))
-    return edge_list                
+# # TODO kayaknya hapus
+# def make_edge_list(am, names):
+#     edge_list = []
+#     for i in range(len(am)):
+#         for j in range(i, len(am)):
+#             if am[i][j] != 0:
+#                 edge_list.append(make_weighted_edge(names[i], names[j], am[i][j]))
+#     return edge_list                
 
 def make_adj_matrix(m):
+    global adj_matrix
+    global list_of_coordinates
     n = len(m)
     adj_matrix = [[ 0 for i in range(n)] for j in range(n)]
     for i in range(0,n):
         for j in range(0,n):
             if m[i][j] == '1':
-                distance = haversineDistance(coordinates[i],coordinates[j])
+                distance = haversineDistance(list_of_coordinates[i],list_of_coordinates[j])
                 adj_matrix[i][j] = distance
     return adj_matrix
 
 def make_heuristic_matrix(m):
+    global heuristic_matrix
+    global list_of_coordinates
     n = len(m)
     heuristic_matrix = [[ 0 for i in range(n)] for j in range(n)]
     for i in range(0,n):
         for j in range(0,n):
             if (i!=j):
-                distance = haversineDistance(coordinates[i],coordinates[j])
+                distance = haversineDistance(list_of_coordinates[i],list_of_coordinates[j])
                 heuristic_matrix[i][j] = distance
             else:
                 heuristic_matrix[i][j] = 0
@@ -103,14 +115,16 @@ def haversineDistance(a,b):
     distance = 2 * r * math.asin(math.sqrt(a)) * 1000
     return distance
 
-def print_matrix(m):
-    for i in range(len(m)):
-        for j in range(len(m[0])):
-            print(m[i][j],end=" ")
-        print()
+# # TODO hapus karena cuma untuk membantu
+# def print_matrix(m):
+#     for i in range(len(m)):
+#         for j in range(len(m[0])):
+#             print(m[i][j],end=" ")
+#         print()
 
 # convert node name to node index
-def convert_to_idx(node_name, list_of_names):
+def convert_to_idx(node_name):
+    global list_of_names
     idx = 0
     for i in range(len(list_of_names)):
         if (list_of_names[i] == node_name):
@@ -118,7 +132,8 @@ def convert_to_idx(node_name, list_of_names):
     return idx
 
 # convert node index to node name
-def convert_to_name(idx, list_of_names):
+def convert_to_name(idx):
+    global list_of_names
     name = ''
     for i in range(len(list_of_names)):
         if (i == idx):
@@ -127,9 +142,14 @@ def convert_to_name(idx, list_of_names):
     
 # initial adalah nama start node (string)
 # final adalah nama goal node (string)
-def astar(initial, final, adj, heur, adj_list, list_of_names):
-    idx_initial = convert_to_idx(initial, list_of_names)
-    idx_final = convert_to_idx(final, list_of_names)
+def astar(initial, final):
+    global adj_matrix
+    global heuristic_matrix
+    global adj_list
+    global list_of_names
+    global path
+    idx_initial = convert_to_idx(initial)
+    idx_final = convert_to_idx(final)
    
     # inisialisasi queue
     queue = [[idx_initial, 0, [initial]]]
@@ -139,7 +159,7 @@ def astar(initial, final, adj, heur, adj_list, list_of_names):
     while(len(queue) != 0):
         # dequeue
         current_node = queue.pop(0)
-        current_node_idx = convert_to_idx(current_node[0],list_of_names)
+        current_node_idx = convert_to_idx(current_node[0])
         # jika start node sama dengan goal node
         if (current_node_idx == idx_final):
             break
@@ -150,11 +170,11 @@ def astar(initial, final, adj, heur, adj_list, list_of_names):
             for c in current_node[2]:
                 visited_node.append(c)
         
-            i = convert_to_idx(neighbor, list_of_names)
+            i = convert_to_idx(neighbor)
             visited_node.append(neighbor)
             # masukkan node ke queue
             # masukkan informasi: current_node name, f(current_node), visited_node ke queue
-            queue.append([neighbor, adj[current_node_idx][i] + heur[i][idx_final], visited_node])
+            queue.append([neighbor, adj_matrix[current_node_idx][i] + heuristic_matrix[i][idx_final], visited_node])
             # urutkan menaik, agar selalu pop yang costnya terkecil
             queue.sort(key = lambda q : q[1])
 
@@ -165,49 +185,96 @@ def astar(initial, final, adj, heur, adj_list, list_of_names):
     cost = 0 
     path_cost = []
     for node in path:
-        path_cost.append(convert_to_idx(node,list_of_names))
+        path_cost.append(convert_to_idx(node))
     for i in range(len(path)-1):
-        cost += adj[path_cost[i]][path_cost[i+1]]
+        cost += adj_matrix[path_cost[i]][path_cost[i+1]]
     
     return path, cost
 
+# TODO hapus
 def make_graph(edge_list):
     G = nx.Graph()
     G.add_weighted_edges_from(edge_list)
     return G
 
-def path_coords(path, coord_list, list_of_names):
+def path_coords(path):
+    global list_of_names
+    global list_of_coordinates
+    global list_of_path_coords
     list_of_path_coords = []
-    for node in path:
-        list_of_path_coords.append(coord_list[convert_to_idx(node,list_of_names)])
+    for node in path[0]:
+        list_of_path_coords.append(list_of_coordinates[convert_to_idx(node)])
     return list_of_path_coords
 
-# PROGRAM UTAMA
-file_name = input("Masukkan nama file dalam format .txt: ")
-f = open("itb.txt", "r")
-lines = f.read().splitlines()
-coordinates = make_coordinates(lines)[0]
-list_lat = make_list_of_lat(coordinates)
-print(list_lat)
-list_lon = make_list_of_lon(coordinates)
-print(list_lon)
-# print(coordinates)
-node_names = make_coordinates(lines)[1]
-matrix = make_matrix(lines)
-adj_list = make_adj_list(matrix,node_names)
-adj_matrix = make_adj_matrix(matrix)
-heur_matrix = make_heuristic_matrix(matrix)
+def print_route(solution):
+    print("Lintasan terpendek: ", end=" ")
+    for i in range(len(solution[0])):
+        if (i == (len(solution[0])-1)):
+            print(solution[0][i], )
+        else:
+            print(solution[0][i], end=" -> ")
+    print("Panjang lintasan: ", solution[1], "meter. ")
+    print("Buka map.html pada browser untuk melihat visualisasi peta.")
 
+def initialize(file_name):
+    # global list_of_coordinates
+    # global list_of_names
+    # global adj_list
+    # global adj_matrix
+    # global heuristic_matrix
+    data_folder = "../test/"
+    file_to_open = data_folder + file_name
+    f = open(file_to_open, "r")
+    lines = f.read().splitlines()
+    coordinates = make_coordinates(lines)[0]
+    list_lat = make_list_of_lat(coordinates)
+    list_lon = make_list_of_lon(coordinates)
+    node_names = make_coordinates(lines)[1]
+    matrix = make_matrix(lines)
+    adj_list = make_adj_list(matrix)
+    adj_matrix = make_adj_matrix(matrix)
+    heur_matrix = make_heuristic_matrix(matrix)
+
+# PROGRAM UTAMA FIX
+file_name = input("Masukkan nama file dalam format .txt: ")
+initialize(file_name)
 start_node = input("Masukkan start node: ")
 goal_node = input("Masukkan goal node: ")
-print("Hasilnya adalah: ")
-# print(astar(start_node,goal_node,adj_matrix,heur_matrix,adj_list,node_names))
-
-print(astar('B','F',adj_matrix,heur_matrix,adj_list,node_names))
-path_solution = astar('B','F',adj_matrix,heur_matrix,adj_list,node_names)[0]
-list_path = path_coords(path_solution,coordinates,node_names)
+print("Hasil: ")
+path_solution = astar(start_node, goal_node)
+list_path = path_coords(path_solution)
 print(list_path)
-# edgelist = make_edge_list(adj_matrix, node_names)
-# for i in range(len(edgelist)):
-#     print(edgelist[i])
+# print(list_of_path_coords)
+print_route(path_solution)
+
+# PROGRAM UTAMA TEST
+# file_name = input("Masukkan nama file dalam format .txt: ")
+# f = open("itb.txt", "r")
+# lines = f.read().splitlines()
+# coordinates = make_coordinates(lines)[0]
+# list_lat = make_list_of_lat(coordinates)
+# # print(list_lat)
+# list_lon = make_list_of_lon(coordinates)
+# # print(list_lon)
+# # print(coordinates)
+# node_names = make_coordinates(lines)[1]
+# matrix = make_matrix(lines)
+# adj_list = make_adj_list(matrix)
+# adj_matrix = make_adj_matrix(matrix)
+# heur_matrix = make_heuristic_matrix(matrix)
+
+# start_node = input("Masukkan start node: ")
+# goal_node = input("Masukkan goal node: ")
+# print("Hasilnya adalah: ")
+# # print(astar(start_node,goal_node,adj_matrix,heur_matrix,adj_list,node_names))
+
+# print(astar('B','F'))
+# path_solution = astar('B','F')
+# print_route(path_solution)
+
+# # list_path = path_coords(path_solution,coordinates,node_names)
+# # print(list_path)
+# # edgelist = make_edge_list(adj_matrix, node_names)
+# # for i in range(len(edgelist)):
+# #     print(edgelist[i])
 
