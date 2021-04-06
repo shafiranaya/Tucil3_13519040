@@ -22,13 +22,15 @@ def make_matrix(lines):
         adj_matrix.append(line)
     return adj_matrix
 
-def make_adj_list(m):
+def make_adj_list(m,list_of_names):
     adj_list = []
     for i in range(0, len(m)):
         neighbor = []
         for j in range(0, len(m)):
             if m[i][j] == '1':
-                neighbor.append(str(j+1))
+                # neighbor.append(str(j+1))
+                name = convert_to_name(j,list_of_names)
+                neighbor.append(name)
         adj_list.append(neighbor)
     return adj_list
 
@@ -128,16 +130,17 @@ def astar(initial, final, adj, heur, adj_list, list_of_names):
         if (current_node_idx == idx_final):
             break
         # mengunjungi node-node yang bertetangga dengan current_node
-        for i_name in adj_list[current_node_idx]:
+        for neighbor in adj_list[current_node_idx]:
             # copy visited path
             visited_node = []
             for c in current_node[2]:
                 visited_node.append(c)
-            i = convert_to_idx(i_name, list_of_names)
-            visited_node.append(i_name)
+        
+            i = convert_to_idx(neighbor, list_of_names)
+            visited_node.append(neighbor)
             # masukkan node ke queue
             # masukkan informasi: current_node name, f(current_node), visited_node ke queue
-            queue.append([i_name, adj[current_node_idx][i] + heur[i][idx_final], visited_node])
+            queue.append([neighbor, adj[current_node_idx][i] + heur[i][idx_final], visited_node])
             # urutkan menaik, agar selalu pop yang costnya terkecil
             queue.sort(key = lambda q : q[1])
 
@@ -165,9 +168,10 @@ lines = f.read().splitlines()
 coordinates = make_coordinates(lines)[0]
 node_names = make_coordinates(lines)[1]
 matrix = make_matrix(lines)
-adj_list = make_adj_list(matrix)
+adj_list = make_adj_list(matrix,node_names)
 adj_matrix = make_adj_matrix(matrix)
 heur_matrix = make_heuristic_matrix(matrix)
+
 print(astar('B','F',adj_matrix,heur_matrix,adj_list,node_names))
 edgelist = make_edge_list(adj_matrix, node_names)
 # for i in range(len(edgelist)):

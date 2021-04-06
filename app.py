@@ -48,9 +48,12 @@ def make_graph_figure(graph):
 ##############################################################################################################################################################
 
 def network_graph(yearRange, AccountToSearch):
-
     edge1 = pd.read_csv('edge1.csv')
     node1 = pd.read_csv('node1.csv')
+
+    G = nx.Graph()
+    G.add_nodes_from(graph.node_names)
+    G.add_edges_from(graph.edgelist)
 
     # filter the record by datetime, to enable interactive control through the input box
     edge1['Datetime'] = "" # add empty Datetime column to edge1 dataframe
