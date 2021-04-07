@@ -9,7 +9,7 @@
   - [Contact](#contact)
 
 ## General Info
-Program ini dapat menentukan lintasan terpendek dari satu titik ke titik lain dengan mengimplementasikan algoritma A*. Program ini akan menampilkan hasil pada *command line* dan membuat file map.html yang dapat dibuka untuk melihat visualisasi peta.
+Program ini dapat menentukan lintasan terpendek dari satu titik ke titik lain dengan mengimplementasikan algoritma A*. Program ini akan menampilkan hasil pada *command line* dan membuat file map.html yang dapat dibuka untuk melihat visualisasi peta. Visualisasi peta dibuat dengan menggunakan library Folium.
 ## Requirements
 - Aplikasi Google Chrome
 - Python3, dapat diinstall dengan mengetikkan pada terminal: `pip3 install python3`
