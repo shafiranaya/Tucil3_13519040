@@ -189,14 +189,19 @@ def print_route(solution):
         else:
             print(solution[0][i], end=" -> ")
     print("Panjang lintasan: ", solution[1], "meter. ")
-    print("Buka map.html (terdapat pada folder bin) dengan Google Chrome untuk melihat visualisasi peta.")
+    print("Buka map.html dengan Google Chrome untuk melihat visualisasi peta.")
+
+def string_route(solution):
+    solution_list = []
+    for i in range(len(solution[0])):
+        if (i == (len(solution[0])-1)):
+            solution_list.append(solution[0][i])
+        else:
+            solution_list.append(solution[0][i]+" -> ")
+    solution_list = ' '.join([str(elem) for elem in solution_list])
+    return "Lintasan terpendek: " + (solution_list) + ", dengan panjang lintasan: " + str(solution[1]) + " meter. "
 
 def initialize(file_name):
-    # global list_of_coordinates
-    # global list_of_names
-    # global adj_list
-    # global adj_matrix
-    # global heuristic_matrix
     data_folder = "../test/"
     file_to_open = data_folder + file_name
     f = open(file_to_open, "r")
@@ -209,4 +214,3 @@ def initialize(file_name):
     adj_list = make_adj_list(matrix)
     adj_matrix = make_adj_matrix(matrix)
     heur_matrix = make_heuristic_matrix(matrix)
-

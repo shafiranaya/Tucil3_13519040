@@ -1,5 +1,5 @@
 # File: main.py
-# Program utama dan visualisasi
+# Program utama dan visualisasi map
 
 import folium
 import graph as g
@@ -39,9 +39,18 @@ fg.add_to(map)
 
 # add title
 title_html = '''
-             <h3 align="center" style="font-size:20px"><b>{g.file_name}</b></h3>
-             '''
+             <h3 align="center" style="font-size:20px"><b>Nama file: {}</b>
+             </h3>
+             '''.format(file_name)
 map.get_root().html.add_child(folium.Element(title_html))
 
+# add lintasan terpendek
+solution = g.string_route(path_solution)
+solution_html = '''
+             <h3 align="center" style="font-size:20px"><b>{}</b>
+             </h3>
+             '''.format(solution)
+map.get_root().html.add_child(folium.Element(solution_html))
+            
 map.add_child(folium.LayerControl())
-map.save(outfile='../bin/map.html')
+map.save(outfile='map.html')
