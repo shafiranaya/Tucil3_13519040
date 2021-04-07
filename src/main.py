@@ -37,5 +37,11 @@ fg = folium.FeatureGroup("Path")
 line = folium.vector_layers.PolyLine(list_path, color='red', weight=10).add_to(fg)
 fg.add_to(map)
 
+# add title
+title_html = '''
+             <h3 align="center" style="font-size:20px"><b>{g.file_name}</b></h3>
+             '''
+map.get_root().html.add_child(folium.Element(title_html))
+
 map.add_child(folium.LayerControl())
 map.save(outfile='../bin/map.html')

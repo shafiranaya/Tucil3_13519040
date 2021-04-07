@@ -1,7 +1,5 @@
 # File: graph.py
 import math
-# import networkx as nx
-# import matplotlib.pyplot as plt
 
 def make_coordinates(lines):
     global list_of_coordinates
@@ -83,7 +81,7 @@ def make_heuristic_matrix(m):
                 heuristic_matrix[i][j] = 0
     return heuristic_matrix
 
-# parameternya tuple of coordinate a, dan tuple of coordinate b
+# parameternya list coordinate a [lat,lon], list coordinate b [lat,lon]
 # return: haversineDistance dalam meters 
 def haversineDistance(a,b):
     # ambil nilai latitude dan longtitude
@@ -131,10 +129,10 @@ def astar(initial, final):
     global adj_list
     global list_of_names
     global path
+
+    # inisialisasi
     idx_initial = convert_to_idx(initial)
     idx_final = convert_to_idx(final)
-   
-    # inisialisasi queue
     queue = [[idx_initial, 0, [initial]]]
     current_node = []
 
@@ -148,11 +146,11 @@ def astar(initial, final):
             break
         # mengunjungi node-node yang bertetangga dengan current_node
         for neighbor in adj_list[current_node_idx]:
-            # copy visited path
+            # copy visited node
             visited_node = []
             for c in current_node[2]:
                 visited_node.append(c)
-        
+            # masukkan neighbor ke visited node
             i = convert_to_idx(neighbor)
             visited_node.append(neighbor)
             # masukkan node ke queue
@@ -187,11 +185,11 @@ def print_route(solution):
     print("Lintasan terpendek: ", end=" ")
     for i in range(len(solution[0])):
         if (i == (len(solution[0])-1)):
-            print(solution[0][i], )
+            print(solution[0][i])
         else:
             print(solution[0][i], end=" -> ")
     print("Panjang lintasan: ", solution[1], "meter. ")
-    print("Buka map.html (terdapat pada folder bin) pada Google Chrome untuk melihat visualisasi peta.")
+    print("Buka map.html (terdapat pada folder bin) dengan Google Chrome untuk melihat visualisasi peta.")
 
 def initialize(file_name):
     # global list_of_coordinates

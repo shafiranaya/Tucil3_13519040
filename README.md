@@ -1,4 +1,4 @@
-# Tucil3_13519040
+# Implementasi Algoritma A* untuk Menentukan Lintasan Terpendek
 > IF2211 Strategi Algoritma - Tucil 3
 
 ## Table of contents
@@ -33,5 +33,5 @@ TODO
 5. Buka map.html pada aplikasi Google Chrome untuk melihat visualisasi peta.
 ## Contact
 Created by: 
-Shafira Naya Aprisadianti - 13519040 - K-1
-Delisha Azza Naadira - 13519133 - K-3
+- Shafira Naya Aprisadianti - 13519040 - K-1
+- Delisha Azza Naadira - 13519133 - K-3
